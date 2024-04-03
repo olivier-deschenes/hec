@@ -63,6 +63,28 @@ export const OperationsManagementAndLogistics: ProgramType = {
   totalCredits: 45,
   courseBlockGroupes: [
     {
+      title: "Bloc de cours préalables",
+      id: v4(),
+      credits: 3,
+      optional: false,
+      courseBlocks: [
+        {
+          title: "Cours préalables",
+          credits: 3,
+          id: v4(),
+          classes: [
+            {
+              code: "20525",
+              prefix: "OPER",
+              credits: 3,
+              title: "Logistique",
+              id: v4(),
+            },
+          ],
+        },
+      ],
+    },
+    {
       title: "Bloc de cours obligatoires",
       id: v4(),
       credits: 21,
