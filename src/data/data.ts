@@ -132,7 +132,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               id: v4(),
             },
             {
-              code: "60302",
+              code: "60550",
               credits: 3,
               prefix: "OPER",
               title: "Outils d'aide à la décision en gestion des opérations",
