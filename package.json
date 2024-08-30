@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@biomejs/biome": "^1.6.3",
+    "lucide": "^0.433.0",
+    "lucide-react": "^0.436.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.5.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

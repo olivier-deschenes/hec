@@ -12,6 +12,7 @@ export type CourseType = {
   credits: number;
   title: string;
   id: string;
+  done?: boolean;
 };
 
 export const getMaxCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
@@ -20,6 +21,16 @@ export const getMaxCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
   }
 
   return courseBlock.maxCredits;
+};
+
+export const getDoneCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
+  return courseBlock.classes.reduce((acc, course) => {
+    if (course.done) {
+      return acc + course.credits;
+    }
+
+    return acc;
+  }, 0);
 };
 
 export type CourseBlockType = {
@@ -79,6 +90,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               credits: 3,
               title: "Logistique",
               id: v4(),
+              done: true,
             },
           ],
         },
@@ -115,6 +127,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               credits: 3,
               title: "Stratégie des opérations et amélioration des processus",
               id: v4(),
+              done: true,
             },
           ],
         },
@@ -152,6 +165,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               prefix: "GEST",
               title: "Regards croisés sur l'entreprise",
               id: v4(),
+              done: true,
             },
           ],
         },
@@ -183,6 +197,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               prefix: "MNGT",
               title: "La consultation en gestion",
               id: v4(),
+              done: true,
             },
             {
               code: "60500",
@@ -220,6 +235,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               prefix: "OPER",
               title: "Systèmes de transport",
               id: v4(),
+              done: true,
             },
             {
               code: "60503",

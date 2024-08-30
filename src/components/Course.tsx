@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 import {
   useCourseBlockGroupContext,
   useCouseBlockContext,
   useProgramContext,
 } from "../contexts";
 import type { CourseType } from "../data/data";
+import { Copy } from "lucide-react";
 
 type Props = {
   course: CourseType;
@@ -20,32 +22,51 @@ export const Course = ({ course }: Props) => {
 
   const canSelectMore = groupCanSelectMore && blockCanSelectMore;
 
-  const [checked, setChecked] = useState(false);
+  const isDone = course.done ?? false;
+  const [checked, setChecked] = useState(isDone);
+
+  const handleOnClick = () => {
+    try {
+      navigator.clipboard.writeText(`${course.prefix} ${course.code}`);
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    }
+  };
 
   return (
-    <li>
+    <li
+      className={twMerge(
+        "mx-1.5 px-1.5 flex items-center gap-1.5",
+        (checked || isDone) && "rounded-md",
+        isDone && "bg-green-200",
+        checked && !isDone && "bg-blue-200"
+      )}
+    >
       {optional && (
         <input
           type="checkbox"
           name=""
           id=""
-          className={"mr-2.5"}
-          disabled={!canSelectMore && !checked}
+          checked={checked}
+          disabled={(!canSelectMore && !checked) || isDone}
           onChange={() => {
             setChecked((prev) => !prev);
             toggleCourse(course);
           }}
         />
       )}
+      <Copy size={16} onClick={handleOnClick} className={"cursor-pointer"} />
       <a
         href={program.resolveClassUrl(course)}
         className={"text-blue-500 hover:underline font-mono"}
         target={"_blank"}
         rel="noreferrer"
       >
-        {course.prefix} {course.code}
+        <span className={"text-nowrap"}>
+          {course.prefix} {course.code}
+        </span>
       </a>{" "}
-      - {course.title}
+      - <span className={"text-ellipsis overflow-hidden"}>{course.title}</span>
     </li>
   );
 };

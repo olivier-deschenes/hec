@@ -4,6 +4,7 @@ import {
   type CourseBlockType,
   type CourseType,
   getCourseKey,
+  getDoneCreditsOfCourseBlock,
   getMaxCreditsOfCourseBlock,
 } from "../data/data";
 
@@ -33,7 +34,7 @@ export const CourseBlockProvider = ({
   const [selectedCourseKeys, setSelectedCourseKeys] =
     useState<CourseBlockStateType>({
       selectedCourseKeys: [],
-      totalSelectedCredits: 0,
+      totalSelectedCredits: getDoneCreditsOfCourseBlock(courseBlockType),
       canSelectMore: true,
     });
 
