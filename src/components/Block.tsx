@@ -25,9 +25,11 @@ export const Block = () => {
   const canSelect = !("credits" in courseBlock);
 
   return (
-    <div className={"flex flex-col border rounded-md"}>
-      <div className={"bg-slate-200 flex justify-between p-2.5 gap-1"}>
-        <h3 className={"font-bold"}>{courseBlock.title}</h3>
+    <div className={"flex flex-col"}>
+      <div
+        className={"bg-[#0169BF] flex justify-between p-2.5 gap-1 rounded-t-md"}
+      >
+        <h3 className={"font-bold text-white"}>{courseBlock.title}</h3>
         <div className={"flex gap-2.5"}>
           {canSelect && (
             <div className={"bg-blue-200 rounded-md px-2.5"}>
@@ -39,7 +41,9 @@ export const Block = () => {
           </div>
         </div>
       </div>
-      <ul className={"flex flex-col py-1.5 gap-1"}>
+      <ul
+        className={"flex flex-col py-1.5 gap-1 border-b border-x rounded-b-md"}
+      >
         {courseBlock.classes.map((course) => (
           <Course key={course.id} course={course} />
         ))}

@@ -36,37 +36,44 @@ export const Course = ({ course }: Props) => {
   return (
     <li
       className={twMerge(
-        "mx-1.5 px-1.5 flex items-center gap-1.5",
+        "mx-1.5 px-1.5 flex items-center gap-1.5 h-full",
         (checked || isDone) && "rounded-md",
         isDone && "bg-green-200",
-        checked && !isDone && "bg-blue-200"
+        checked && !isDone && "bg-blue-200",
       )}
     >
-      {optional && (
-        <input
-          type="checkbox"
-          name=""
-          id=""
-          checked={checked}
-          disabled={(!canSelectMore && !checked) || isDone}
-          onChange={() => {
-            setChecked((prev) => !prev);
-            toggleCourse(course);
+      <div className={"flex self-start gap-1.5 items-center"}>
+        {optional && (
+          <input
+            type="checkbox"
+            name=""
+            id=""
+            checked={checked}
+            disabled={(!canSelectMore && !checked) || isDone}
+            onChange={() => {
+              setChecked((prev) => !prev);
+              toggleCourse(course);
+            }}
+          />
+        )}
+        <a
+          href={program.resolveClassUrl(course)}
+          className={"text-blue-500 hover:underline font-mono"}
+          target={"_blank"}
+          rel="noreferrer"
+          onClick={(e) => {
+            if (e.ctrlKey || e.metaKey) {
+              e.preventDefault();
+              handleOnClick();
+            }
           }}
-        />
-      )}
-      <Copy size={16} onClick={handleOnClick} className={"cursor-pointer"} />
-      <a
-        href={program.resolveClassUrl(course)}
-        className={"text-blue-500 hover:underline font-mono"}
-        target={"_blank"}
-        rel="noreferrer"
-      >
-        <span className={"text-nowrap"}>
-          {course.prefix} {course.code}
-        </span>
-      </a>{" "}
-      - <span className={"text-ellipsis overflow-hidden"}>{course.title}</span>
+        >
+          <span className={"text-nowrap"}>
+            {course.prefix} {course.code}
+          </span>
+        </a>
+      </div>
+      <span className={"text-ellipsis overflow-hidden"}>{course.title}</span>
     </li>
   );
 };
