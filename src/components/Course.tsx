@@ -6,7 +6,6 @@ import {
   useProgramContext,
 } from "../contexts";
 import type { CourseType } from "../data/data";
-import { Copy } from "lucide-react";
 
 type Props = {
   course: CourseType;
