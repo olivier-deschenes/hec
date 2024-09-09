@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { CourseBlockContext } from "./CourseBlockContext";
 import { CourseBlockGroupContext } from "./CourseBlockGroupContext";
 import { ProgramContext } from "./ProgramContext";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export const useProgramContext = () => {
   const context = useContext(ProgramContext);
@@ -35,4 +36,14 @@ export const useCouseBlockContext = () => {
   }
 
   return courseBlock;
+};
+
+export const useAuthContext = () => {
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error("useAuthContext must be used within an AuthProvider");
+  }
+
+  return authContext;
 };

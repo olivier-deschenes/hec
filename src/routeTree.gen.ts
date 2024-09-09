@@ -12,11 +12,23 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProgramsIndexImport } from './routes/programs/index'
+import { Route as ProgramsProgramIdImport } from './routes/programs/$programId'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProgramsIndexRoute = ProgramsIndexImport.update({
+  path: '/programs/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProgramsProgramIdRoute = ProgramsProgramIdImport.update({
+  path: '/programs/$programId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -31,12 +43,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/programs/$programId': {
+      id: '/programs/$programId'
+      path: '/programs/$programId'
+      fullPath: '/programs/$programId'
+      preLoaderRoute: typeof ProgramsProgramIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/programs/': {
+      id: '/programs/'
+      path: '/programs'
+      fullPath: '/programs'
+      preLoaderRoute: typeof ProgramsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  ProgramsProgramIdRoute,
+  ProgramsIndexRoute,
+})
 
 /* prettier-ignore-end */
 
@@ -46,11 +76,19 @@ export const routeTree = rootRoute.addChildren({ IndexRoute })
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/programs/$programId",
+        "/programs/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/programs/$programId": {
+      "filePath": "programs/$programId.tsx"
+    },
+    "/programs/": {
+      "filePath": "programs/index.tsx"
     }
   }
 }

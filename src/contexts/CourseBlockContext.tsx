@@ -2,7 +2,7 @@ import { createContext, useCallback, useMemo, useState } from "react";
 import { useCourseBlockGroupContext } from ".";
 import {
   type CourseBlockType,
-  type CourseType,
+  type CourseTypeOld,
   getCourseKey,
   getDoneCreditsOfCourseBlock,
   getMaxCreditsOfCourseBlock,
@@ -15,7 +15,7 @@ type CourseBlockStateType = {
 };
 export type CourseBlockContextType = {
   courseBlockType: CourseBlockType;
-  toggleCourse: (course: CourseType) => void;
+  toggleCourse: (course: CourseTypeOld) => void;
 } & CourseBlockStateType;
 
 export const CourseBlockContext = createContext<CourseBlockContextType | null>(
@@ -39,7 +39,7 @@ export const CourseBlockProvider = ({
     });
 
   const toggleCourse = useCallback(
-    (course: CourseType) => {
+    (course: CourseTypeOld) => {
       const key = getCourseKey(course);
 
       const index = selectedCourseKeys.selectedCourseKeys.indexOf(key);

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import {
   type CourseBlockGroupType,
-  type CourseType,
+  type CourseTypeOld,
   getCourseKey,
 } from "../data/data";
 
@@ -12,7 +12,7 @@ type CourseBlockGroupStateType = {
 };
 export type CourseBlockGroupContextType = {
   courseBlockGroupType: CourseBlockGroupType;
-  toggleCourse: (course: CourseType) => void;
+  toggleCourse: (course: CourseTypeOld) => void;
 } & CourseBlockGroupStateType;
 
 export const CourseBlockGroupContext =
@@ -33,7 +33,7 @@ export const CourseBlockGroupProvider = ({
     });
 
   const toggleCourse = useCallback(
-    (course: CourseType) => {
+    (course: CourseTypeOld) => {
       const key = getCourseKey(course);
 
       const index = selectedCourseKeys.selectedCourseKeys.indexOf(key);

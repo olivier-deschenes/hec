@@ -1,13 +1,13 @@
 import { CourseBlockGroupProvider } from "../contexts/CourseBlockGroupContext";
 import { ProgramProvider } from "../contexts/ProgramContext";
-import type { ProgramType } from "../data/data";
+import type { ProgramTypeOld } from "../data/data";
 import { Group } from "./Group";
 
 type Props = {
-  program: ProgramType;
+  program: ProgramTypeOld;
 };
 
-export const Program = ({ program }: Props) => {
+export const OldProgram = ({ program }: Props) => {
   return (
     <ProgramProvider program={program}>
       <div className={"p-5 flex flex-col gap-5"}>

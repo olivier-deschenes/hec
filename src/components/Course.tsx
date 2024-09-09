@@ -5,10 +5,10 @@ import {
   useCouseBlockContext,
   useProgramContext,
 } from "../contexts";
-import type { CourseType } from "../data/data";
+import type { CourseTypeOld } from "../data/data";
 
 type Props = {
-  course: CourseType;
+  course: CourseTypeOld;
 };
 
 export const Course = ({ course }: Props) => {
@@ -38,7 +38,7 @@ export const Course = ({ course }: Props) => {
         "mx-1.5 px-1.5 flex items-center gap-1.5 h-full",
         (checked || isDone) && "rounded-md",
         isDone && "bg-green-200",
-        checked && !isDone && "bg-blue-200",
+        checked && !isDone && "bg-blue-200"
       )}
     >
       <div className={"flex self-start gap-1.5 items-center"}>

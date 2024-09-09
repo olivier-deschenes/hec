@@ -1,12 +1,12 @@
 import { v4 } from "uuid";
 
-export const getCourseKey = (course: CourseType) =>
+export const getCourseKey = (course: CourseTypeOld) =>
   `${course.prefix}${course.code}`;
 
-export const compateCourseToKey = (course: CourseType, key: string) =>
+export const compateCourseToKey = (course: CourseTypeOld, key: string) =>
   getCourseKey(course) === key;
 
-export type CourseType = {
+export type CourseTypeOld = {
   code: string;
   prefix: string;
   credits: number;
@@ -35,7 +35,7 @@ export const getDoneCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
 
 export type CourseBlockType = {
   title: string;
-  classes: CourseType[];
+  classes: CourseTypeOld[];
   id: string;
 } & (
   | { credits: number }
@@ -53,17 +53,17 @@ export type CourseBlockGroupType = {
   optional: boolean;
 };
 
-export type ProgramType = {
+export type ProgramTypeOld = {
   title: string;
   courseBlockGroupes: CourseBlockGroupType[];
   id: string;
-  resolveClassUrl: (course: CourseType) => string;
+  resolveClassUrl: (course: CourseTypeOld) => string;
   courseCount: number;
   courseCredits: number;
   totalCredits: number;
 };
 
-export const OperationsManagementAndLogistics: ProgramType = {
+export const OperationsManagementAndLogistics: ProgramTypeOld = {
   title:
     "Maîtrise en gestion (M. Sc.) - gestion des opérations et de la logistique",
   resolveClassUrl: (classData) =>
