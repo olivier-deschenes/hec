@@ -1,6 +1,5 @@
 import { ProgramTypeOld } from "@/data/data";
 import { supabase } from "@/lib/supabase";
-import { ProgramType } from "@/types/Program";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
 type Params = {
@@ -17,7 +16,7 @@ const get = async ({ programId }: Params) => {
     throw new Error("Program not found");
   }
 
-  return data[0] as ProgramType;
+  return data[0];
 };
 
 export const USE_PROGRAM_KEY = "program";

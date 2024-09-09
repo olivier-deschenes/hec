@@ -14,21 +14,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { usePostProgram } from "@/mutations/usePostProgram";
+import { usePostCourse } from "@/mutations/usePostCourse";
+import { CourseBlockGroupType } from "@/types";
 
 const FormSchema = z.object({
   title: z.string(),
+  course_block_group_id: z.number(),
 });
 
-export function ProgramForm() {
+type Props = {
+  course_block_group_id: CourseBlockGroupType["id"];
+};
+
+export function CourseBlockForm({ course_block_group_id }: Props) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
+      course_block_group_id,
     },
   });
 
-  const { mutate } = usePostProgram();
+  const { mutate } = usePostCourse();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     mutate(data);
@@ -44,7 +51,7 @@ export function ProgramForm() {
             <FormItem>
               <FormLabel>Code</FormLabel>
               <FormControl>
-                <Input placeholder="Title" {...field} />
+                <Input placeholder="code" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
