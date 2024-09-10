@@ -7,8 +7,7 @@ import {
 } from "../../contexts";
 import { FullCourseType } from "@/types";
 import { useDeleteCourse } from "@/mutations/course/useDeleteCourse";
-import { Button } from "@/components/ui/button";
-import { CircleXIcon, LoaderCircle } from "lucide-react";
+import { DeleteButton } from "@/components/forms/DeleteButton";
 
 type Props = {
   course: FullCourseType;
@@ -64,7 +63,7 @@ export const Course = ({ course }: Props) => {
           href={program.resolveClassUrl(course)}
           className={"text-blue-500 hover:underline font-mono"}
           target={"_blank"}
-          rel="noreferrer"
+        rel="noreferrer"
           onClick={(e) => {
             if (e.ctrlKey || e.metaKey) {
               e.preventDefault();
@@ -78,13 +77,7 @@ export const Course = ({ course }: Props) => {
         </a>
       </div>
       <span className={"text-ellipsis overflow-hidden"}>{course.title}</span>
-      <Button
-        variant={"destructive"}
-        onClick={() => mutate(course.id)}
-        disabled={isPending}
-      >
-        {isPending ? <LoaderCircle size={12} /> : <CircleXIcon size={24} />}
-      </Button>
+      <DeleteButton onClick={() => mutate(course.id)} isPending={isPending} />
     </li>
   );
 };

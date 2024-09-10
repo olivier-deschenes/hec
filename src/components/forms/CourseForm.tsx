@@ -33,6 +33,7 @@ const FormSchema = z.object({
   done: z.boolean().default(false),
   program_id: z.number(),
   course_block_id: z.number(),
+  credits: z.number().nullable().default(null),
 });
 
 type Props = {
@@ -50,6 +51,7 @@ export function CourseForm({ program_id, course_block_id }: Props) {
       code: "",
       prefix: "",
       title: "",
+      credits: 3,
     },
   });
 
@@ -77,6 +79,19 @@ export function CourseForm({ program_id, course_block_id }: Props) {
             >
               <FormField
                 control={form.control}
+                name="prefix"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Prefix</FormLabel>
+                    <FormControl>
+                      <Input placeholder="prefix" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
                 name="code"
                 render={({ field }) => (
                   <FormItem>
@@ -90,12 +105,12 @@ export function CourseForm({ program_id, course_block_id }: Props) {
               />
               <FormField
                 control={form.control}
-                name="prefix"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prefix</FormLabel>
+                    <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="prefix" {...field} />
+                      <Input placeholder="title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -103,12 +118,17 @@ export function CourseForm({ program_id, course_block_id }: Props) {
               />
               <FormField
                 control={form.control}
-                name="title"
+                name="credits"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Credits</FormLabel>
                     <FormControl>
-                      <Input placeholder="title" {...field} />
+                      <Input 
+                        type="number" 
+                        placeholder="credits" {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        value={Number(field.value)}
+                        />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

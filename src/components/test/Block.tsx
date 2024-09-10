@@ -2,6 +2,8 @@ import { FullCourseBlockType } from "@/types";
 import { useCouseBlockContext, useProgramContext } from "../../contexts";
 import { Course } from "./Course";
 import { CourseForm } from "@/components/forms/CourseForm";
+import { useDeleteCourseBlock } from "@/mutations/course-block/useDeleteCourseBlock";
+import { DeleteButton } from "@/components/forms/DeleteButton";
 
 const getCreditsInfomartion = (courseBlock: FullCourseBlockType) => {
   if (courseBlock.credits !== null) {
@@ -25,6 +27,8 @@ export const Block = () => {
   const program_id = useProgramContext().id;
 
   const canSelect = !("credits" in courseBlock);
+  
+  const { mutate, isPending } = useDeleteCourseBlock();
 
   return (
     <div className={"flex flex-col"}>
@@ -56,6 +60,9 @@ export const Block = () => {
           />
         </li>
       </ul>
+      <DeleteButton onClick={() => mutate(courseBlock.id)} isPending={isPending}>
+        Delete Block
+      </DeleteButton>
     </div>
   );
 };

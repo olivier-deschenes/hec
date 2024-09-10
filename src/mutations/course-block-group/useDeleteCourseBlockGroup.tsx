@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 const post = async (id: FullCourseBlockGroupType["id"]) => {
   const { data } = await supabase
-    .from("course_block")
+    .from("course_block_group")
     .delete()
     .eq("id", id)
     .select();

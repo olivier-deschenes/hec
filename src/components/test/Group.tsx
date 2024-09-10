@@ -2,6 +2,8 @@ import { CourseBlockForm } from "@/components/forms/CourseBlockForm";
 import { useCourseBlockGroupContext, useProgramContext } from "../../contexts";
 import { CourseBlockProvider } from "../../contexts/CourseBlockContext";
 import { Block } from "./Block";
+import { useDeleteCourseBlockGroup } from "@/mutations/course-block-group/useDeleteCourseBlockGroup";
+import { DeleteButton } from "@/components/forms/DeleteButton";
 
 export const Group = () => {
   const courseBlockGroup = useCourseBlockGroupContext().courseBlockGroupType;
@@ -10,6 +12,8 @@ export const Group = () => {
   const optional = useCourseBlockGroupContext().courseBlockGroupType.optional;
 
   const program_id = useProgramContext().id;
+
+  const { mutate, isPending } = useDeleteCourseBlockGroup();
 
   return (
     <div className={"flex flex-col gap-1"}>
@@ -24,6 +28,9 @@ export const Group = () => {
           <div className={"bg-slate-300 rounded-md px-2.5"}>
             {courseBlockGroup.credits} crédits
           </div>
+          <DeleteButton onClick={() => mutate(courseBlockGroup.id)} isPending={isPending}>
+            Delete Group
+          </DeleteButton>
         </div>
       </h2>
       <div
@@ -39,12 +46,10 @@ export const Group = () => {
             <Block />
           </CourseBlockProvider>
         ))}
-      </div>
-      <div>
         <CourseBlockForm
           course_block_group_id={courseBlockGroup.id}
           program_id={program_id}
-        />
+        />  
       </div>
     </div>
   );
