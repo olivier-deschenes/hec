@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { CourseType } from "@/types/Course";
+import { CourseType } from "@/types";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
 type Params = {

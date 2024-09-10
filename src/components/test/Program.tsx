@@ -1,10 +1,10 @@
-import { CourseBlockGroupProvider } from "../contexts/CourseBlockGroupContext";
-import { ProgramProvider } from "../contexts/ProgramContext";
-import type { ProgramTypeOld } from "../data/data";
+import { FullProgramType } from "@/types";
+import { CourseBlockGroupProvider } from "../../contexts/CourseBlockGroupContext";
+import { ProgramProvider } from "../../contexts/ProgramContext";
 import { Group } from "./Group";
 
 type Props = {
-  program: ProgramTypeOld;
+  program: FullProgramType;
 };
 
 export const OldProgram = ({ program }: Props) => {
@@ -25,7 +25,7 @@ export const OldProgram = ({ program }: Props) => {
           </div>
         </div>
         <div className={"flex flex-col gap-10"}>
-          {program.courseBlockGroupes.map((courseBlockGroup) => (
+          {program.courseBlockGroups.map((courseBlockGroup) => (
             <CourseBlockGroupProvider
               courseBlockGroupType={courseBlockGroup}
               key={courseBlockGroup.id}

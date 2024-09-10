@@ -1,17 +1,15 @@
 import { programsQueryOptions } from "@/components/queries/programs/usePrograms";
 import { queryClient } from "@/lib/query";
 import { supabase } from "@/lib/supabase";
-import { ProgramType } from "@/types";
+import { PostProgramType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-type PostProgramData = Pick<ProgramType, "title">;
+const post = async (postData: PostProgramType) => {
+  const { data } = await supabase.from("program").insert(postData).select();
 
-const post = async (postData: PostProgramData) => {
-  const { data } = await supabase.from("program_v2").insert(postData).select();
-
-  if (!data || !data.length)  {
-    throw new Error("Error")
+  if (!data || !data.length) {
+    throw new Error("Error");
   }
 
   return data[0];

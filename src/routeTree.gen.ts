@@ -13,7 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProgramsIndexImport } from './routes/programs/index'
-import { Route as ProgramsProgramIdImport } from './routes/programs/$programId'
+import { Route as ProgramsProgramidImport } from './routes/programs/$program_id'
 
 // Create/Update Routes
 
@@ -27,8 +27,8 @@ const ProgramsIndexRoute = ProgramsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProgramsProgramIdRoute = ProgramsProgramIdImport.update({
-  path: '/programs/$programId',
+const ProgramsProgramidRoute = ProgramsProgramidImport.update({
+  path: '/programs/$program_id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -43,11 +43,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/programs/$programId': {
-      id: '/programs/$programId'
-      path: '/programs/$programId'
-      fullPath: '/programs/$programId'
-      preLoaderRoute: typeof ProgramsProgramIdImport
+    '/programs/$program_id': {
+      id: '/programs/$program_id'
+      path: '/programs/$program_id'
+      fullPath: '/programs/$program_id'
+      preLoaderRoute: typeof ProgramsProgramidImport
       parentRoute: typeof rootRoute
     }
     '/programs/': {
@@ -62,11 +62,49 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  ProgramsProgramIdRoute,
-  ProgramsIndexRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/programs/$program_id': typeof ProgramsProgramidRoute
+  '/programs': typeof ProgramsIndexRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/programs/$program_id': typeof ProgramsProgramidRoute
+  '/programs': typeof ProgramsIndexRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/programs/$program_id': typeof ProgramsProgramidRoute
+  '/programs/': typeof ProgramsIndexRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/programs/$program_id' | '/programs'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/programs/$program_id' | '/programs'
+  id: '__root__' | '/' | '/programs/$program_id' | '/programs/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  ProgramsProgramidRoute: typeof ProgramsProgramidRoute
+  ProgramsIndexRoute: typeof ProgramsIndexRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  ProgramsProgramidRoute: ProgramsProgramidRoute,
+  ProgramsIndexRoute: ProgramsIndexRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
@@ -77,15 +115,15 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/programs/$programId",
+        "/programs/$program_id",
         "/programs/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/programs/$programId": {
-      "filePath": "programs/$programId.tsx"
+    "/programs/$program_id": {
+      "filePath": "programs/$program_id.tsx"
     },
     "/programs/": {
       "filePath": "programs/index.tsx"

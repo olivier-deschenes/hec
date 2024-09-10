@@ -1,9 +1,10 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import {
-  type CourseBlockGroupType,
-  type CourseTypeOld,
-  getCourseKey,
-} from "../data/data";
+  FullCourseBlockGroupType,
+  FullCourseType,
+  FullProgramType,
+} from "@/types";
+import { getCourseKey } from "@/data/data";
 
 type CourseBlockGroupStateType = {
   selectedCourseKeys: string[];
@@ -11,8 +12,8 @@ type CourseBlockGroupStateType = {
   canSelectMore: boolean;
 };
 export type CourseBlockGroupContextType = {
-  courseBlockGroupType: CourseBlockGroupType;
-  toggleCourse: (course: CourseTypeOld) => void;
+  courseBlockGroupType: FullCourseBlockGroupType;
+  toggleCourse: (course: FullCourseType) => void;
 } & CourseBlockGroupStateType;
 
 export const CourseBlockGroupContext =
@@ -22,7 +23,7 @@ export const CourseBlockGroupProvider = ({
   courseBlockGroupType,
   children,
 }: {
-  courseBlockGroupType: CourseBlockGroupType;
+  courseBlockGroupType: FullProgramType["courseBlockGroups"][number];
   children: React.ReactNode;
 }) => {
   const [selectedCourseKeys, setSelectedCourseKeys] =
@@ -33,14 +34,14 @@ export const CourseBlockGroupProvider = ({
     });
 
   const toggleCourse = useCallback(
-    (course: CourseTypeOld) => {
+    (course: FullCourseType) => {
       const key = getCourseKey(course);
 
       const index = selectedCourseKeys.selectedCourseKeys.indexOf(key);
 
       if (index === -1) {
         const newCredits =
-          selectedCourseKeys.totalSelectedCredits + course.credits;
+          selectedCourseKeys.totalSelectedCredits + (course.credits ?? 0);
 
         if (
           courseBlockGroupType.credits &&
@@ -52,7 +53,8 @@ export const CourseBlockGroupProvider = ({
         setSelectedCourseKeys((prev) => ({
           ...prev,
           selectedCourseKeys: [...prev.selectedCourseKeys, key],
-          totalSelectedCredits: prev.totalSelectedCredits + course.credits,
+          totalSelectedCredits:
+            prev.totalSelectedCredits + (course.credits ?? 0),
           canSelectMore:
             !courseBlockGroupType.credits ||
             courseBlockGroupType.credits > newCredits,
@@ -64,7 +66,8 @@ export const CourseBlockGroupProvider = ({
             ...prev.selectedCourseKeys.slice(0, index),
             ...prev.selectedCourseKeys.slice(index + 1),
           ],
-          totalSelectedCredits: prev.totalSelectedCredits - course.credits,
+          totalSelectedCredits:
+            prev.totalSelectedCredits - (course.credits ?? 0),
           canSelectMore: true,
         }));
       }

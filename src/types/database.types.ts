@@ -12,7 +12,10 @@ export type Database = {
       course: {
         Row: {
           code: string
+          course_block_id: number
           created_at: string
+          created_by: string
+          credits: number | null
           done: boolean
           id: number
           prefix: string
@@ -21,7 +24,10 @@ export type Database = {
         }
         Insert: {
           code: string
+          course_block_id: number
           created_at?: string
+          created_by?: string
+          credits?: number | null
           done?: boolean
           id?: number
           prefix: string
@@ -30,7 +36,10 @@ export type Database = {
         }
         Update: {
           code?: string
+          course_block_id?: number
           created_at?: string
+          created_by?: string
+          credits?: number | null
           done?: boolean
           id?: number
           prefix?: string
@@ -39,39 +48,82 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "course_course_block_id_fkey"
+            columns: ["course_block_id"]
+            isOneToOne: false
+            referencedRelation: "course_block"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "course_program_id_fkey"
             columns: ["program_id"]
             isOneToOne: false
-            referencedRelation: "program_v2"
+            referencedRelation: "program"
             referencedColumns: ["id"]
           },
         ]
       }
       course_block: {
         Row: {
-          course_block_id: number
+          course_block_group_id: number
           created_at: string
+          created_by: string
+          credits: number | null
           id: number
+          maximum_credits: number | null
+          minimum_credits: number | null
+          program_id: number
           title: string
         }
         Insert: {
-          course_block_id: number
+          course_block_group_id: number
           created_at?: string
+          created_by?: string
+          credits?: number | null
           id?: number
+          maximum_credits?: number | null
+          minimum_credits?: number | null
+          program_id: number
           title: string
         }
         Update: {
-          course_block_id?: number
+          course_block_group_id?: number
           created_at?: string
+          created_by?: string
+          credits?: number | null
           id?: number
+          maximum_credits?: number | null
+          minimum_credits?: number | null
+          program_id?: number
           title?: string
         }
         Relationships: [
           {
-            foreignKeyName: "course_block_course_block_id_fkey"
-            columns: ["course_block_id"]
+            foreignKeyName: "course_block_course_block_group_id_fkey"
+            columns: ["course_block_group_id"]
             isOneToOne: false
             referencedRelation: "course_block_group"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_block_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_block_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "program"
             referencedColumns: ["id"]
           },
         ]
@@ -79,6 +131,8 @@ export type Database = {
       course_block_group: {
         Row: {
           created_at: string
+          created_by: string
+          credits: number | null
           id: number
           optional: boolean
           program_id: number
@@ -86,6 +140,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          created_by?: string
+          credits?: number | null
           id?: number
           optional?: boolean
           program_id: number
@@ -93,6 +149,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          created_by?: string
+          credits?: number | null
           id?: number
           optional?: boolean
           program_id?: number
@@ -100,41 +158,22 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "course_block_group_program_id_fkey"
-            columns: ["program_id"]
-            isOneToOne: false
-            referencedRelation: "program_v2"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      program: {
-        Row: {
-          created_at: string
-          created_by: string | null
-          id: number
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string | null
-          id?: number
-        }
-        Update: {
-          created_at?: string
-          created_by?: string | null
-          id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "program_created_by_fkey"
+            foreignKeyName: "course_block_group_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "course_block_group_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "program"
+            referencedColumns: ["id"]
+          },
         ]
       }
-      program_v2: {
+      program: {
         Row: {
           created_at: string
           created_by: string

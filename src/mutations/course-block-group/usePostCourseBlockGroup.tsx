@@ -1,16 +1,21 @@
-import { coursesQueryOptions } from "@/components/queries/courses/useCourses";
+import { fullProgramQueryOptions } from "@/components/queries/useFullData";
 import { queryClient } from "@/lib/query";
 import { supabase } from "@/lib/supabase";
-import { CourseBlockGroupType } from "@/types";
+import { PostCourseBlockGroupType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-type PostCourseData = Omit<CourseBlockGroupType, "id">;
+const post = async (postData: PostCourseBlockGroupType) => {
+  const { data } = await supabase
+    .from("course_block_group")
+    .insert(postData)
+    .select();
 
-const post = async (postData: PostCourseData) => {
-  const { data } = await supabase.from("course_block_group").insert(postData).select();
+  if (!data) {
+    throw new Error("Error");
+  }
 
-  return data;
+  return data[0];
 };
 
 const POST_COURSE_GROUP_BLOCK__KEY = "postCourseBlockGroup";
@@ -20,12 +25,10 @@ export const usePostCourseBlockGroup = () => {
     mutationFn: post,
     mutationKey: [POST_COURSE_GROUP_BLOCK__KEY],
     onSuccess: (data) => {
-      const [newCourse] = data!;
-
-      toast.success("Successfully" + JSON.stringify(data));
+      toast.success("Successfully");
 
       queryClient.invalidateQueries({
-        queryKey: coursesQueryOptions({ program_id: newCourse.program_id })
+        queryKey: fullProgramQueryOptions({ program_id: data.program_id })
           .queryKey,
       });
     },

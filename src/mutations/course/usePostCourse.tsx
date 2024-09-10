@@ -1,13 +1,11 @@
-import { coursesQueryOptions } from "@/components/queries/courses/useCourses";
+import { fullProgramQueryOptions } from "@/components/queries/useFullData";
 import { queryClient } from "@/lib/query";
 import { supabase } from "@/lib/supabase";
-import { CourseType } from "@/types";
+import { PostCourseType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-type PostCourseData = Omit<CourseType, "id">;
-
-const post = async (postData: PostCourseData) => {
+const post = async (postData: PostCourseType) => {
   const { data } = await supabase.from("course").insert(postData).select();
 
   return data;
@@ -25,7 +23,7 @@ export const usePostCourse = () => {
       toast.success("Course created successfully" + JSON.stringify(data));
 
       queryClient.invalidateQueries({
-        queryKey: coursesQueryOptions({ program_id: newCourse.program_id })
+        queryKey: fullProgramQueryOptions({ program_id: newCourse.program_id })
           .queryKey,
       });
     },

@@ -1,12 +1,11 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import { useCourseBlockGroupContext } from ".";
 import {
-  type CourseBlockType,
-  type CourseTypeOld,
   getCourseKey,
   getDoneCreditsOfCourseBlock,
-  getMaxCreditsOfCourseBlock,
+  getmaximum_creditsOfCourseBlock,
 } from "../data/data";
+import { FullCourseBlockType, FullCourseType } from "@/types";
 
 type CourseBlockStateType = {
   selectedCourseKeys: string[];
@@ -14,8 +13,8 @@ type CourseBlockStateType = {
   canSelectMore: boolean;
 };
 export type CourseBlockContextType = {
-  courseBlockType: CourseBlockType;
-  toggleCourse: (course: CourseTypeOld) => void;
+  courseBlockType: FullCourseBlockType;
+  toggleCourse: (course: FullCourseType) => void;
 } & CourseBlockStateType;
 
 export const CourseBlockContext = createContext<CourseBlockContextType | null>(
@@ -26,7 +25,7 @@ export const CourseBlockProvider = ({
   courseBlockType,
   children,
 }: {
-  courseBlockType: CourseBlockType;
+  courseBlockType: FullCourseBlockType;
   children: React.ReactNode;
 }) => {
   const groupToggleCourse = useCourseBlockGroupContext().toggleCourse;
@@ -39,25 +38,27 @@ export const CourseBlockProvider = ({
     });
 
   const toggleCourse = useCallback(
-    (course: CourseTypeOld) => {
+    (course: FullCourseType) => {
       const key = getCourseKey(course);
 
       const index = selectedCourseKeys.selectedCourseKeys.indexOf(key);
 
       if (index === -1) {
-        const maxCredits = getMaxCreditsOfCourseBlock(courseBlockType);
+        const maximum_credits =
+          getmaximum_creditsOfCourseBlock(courseBlockType);
         const newCredits =
-          selectedCourseKeys.totalSelectedCredits + course.credits;
+          selectedCourseKeys.totalSelectedCredits + (course.credits ?? 0);
 
-        if (newCredits > maxCredits) {
+        if (newCredits > maximum_credits) {
           return;
         }
 
         setSelectedCourseKeys((prev) => ({
           ...prev,
           selectedCourseKeys: [...prev.selectedCourseKeys, key],
-          totalSelectedCredits: prev.totalSelectedCredits + course.credits,
-          canSelectMore: newCredits < maxCredits,
+          totalSelectedCredits:
+            prev.totalSelectedCredits + (course.credits ?? 0),
+          canSelectMore: newCredits < maximum_credits,
         }));
       } else {
         setSelectedCourseKeys((prev) => ({
@@ -66,7 +67,8 @@ export const CourseBlockProvider = ({
             ...prev.selectedCourseKeys.slice(0, index),
             ...prev.selectedCourseKeys.slice(index + 1),
           ],
-          totalSelectedCredits: prev.totalSelectedCredits - course.credits,
+          totalSelectedCredits:
+            prev.totalSelectedCredits - (course.credits ?? 0),
           canSelectMore: true,
         }));
       }

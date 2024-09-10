@@ -4,11 +4,14 @@ import {
   useCourseBlockGroupContext,
   useCouseBlockContext,
   useProgramContext,
-} from "../contexts";
-import type { CourseTypeOld } from "../data/data";
+} from "../../contexts";
+import { FullCourseType } from "@/types";
+import { useDeleteCourse } from "@/mutations/course/useDeleteCourse";
+import { Button } from "@/components/ui/button";
+import { CircleXIcon, LoaderCircle } from "lucide-react";
 
 type Props = {
-  course: CourseTypeOld;
+  course: FullCourseType;
 };
 
 export const Course = ({ course }: Props) => {
@@ -31,6 +34,8 @@ export const Course = ({ course }: Props) => {
       console.error("Failed to copy text: ", err);
     }
   };
+
+  const { mutate, isPending } = useDeleteCourse();
 
   return (
     <li
@@ -73,6 +78,13 @@ export const Course = ({ course }: Props) => {
         </a>
       </div>
       <span className={"text-ellipsis overflow-hidden"}>{course.title}</span>
+      <Button
+        variant={"destructive"}
+        onClick={() => mutate(course.id)}
+        disabled={isPending}
+      >
+        {isPending ? <LoaderCircle size={12} /> : <CircleXIcon size={24} />}
+      </Button>
     </li>
   );
 };

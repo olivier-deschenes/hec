@@ -1,16 +1,13 @@
-import { ProgramTypeOld } from "@/data/data";
 import { supabase } from "@/lib/supabase";
+import { ProgramType } from "@/types";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
 type Params = {
-  programId: ProgramTypeOld["id"];
+  programId: ProgramType["id"];
 };
 
 const get = async ({ programId }: Params) => {
-  const { data } = await supabase
-    .from("program_v2")
-    .select()
-    .eq("id", programId);
+  const { data } = await supabase.from("program").select().eq("id", programId);
 
   if (!data || data.length === 0) {
     throw new Error("Program not found");

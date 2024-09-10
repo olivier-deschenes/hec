@@ -1,5 +1,6 @@
-import { useCourseBlockGroupContext } from "../contexts";
-import { CourseBlockProvider } from "../contexts/CourseBlockContext";
+import { CourseBlockForm } from "@/components/forms/CourseBlockForm";
+import { useCourseBlockGroupContext, useProgramContext } from "../../contexts";
+import { CourseBlockProvider } from "../../contexts/CourseBlockContext";
 import { Block } from "./Block";
 
 export const Group = () => {
@@ -7,6 +8,8 @@ export const Group = () => {
   const totalSelectedCredits =
     useCourseBlockGroupContext().totalSelectedCredits;
   const optional = useCourseBlockGroupContext().courseBlockGroupType.optional;
+
+  const program_id = useProgramContext().id;
 
   return (
     <div className={"flex flex-col gap-1"}>
@@ -36,6 +39,12 @@ export const Group = () => {
             <Block />
           </CourseBlockProvider>
         ))}
+      </div>
+      <div>
+        <CourseBlockForm
+          course_block_group_id={courseBlockGroup.id}
+          program_id={program_id}
+        />
       </div>
     </div>
   );

@@ -1,19 +1,20 @@
-import { useCouseBlockContext } from "../contexts";
-import type { CourseBlockType } from "../data/data";
+import { FullCourseBlockType } from "@/types";
+import { useCouseBlockContext, useProgramContext } from "../../contexts";
 import { Course } from "./Course";
+import { CourseForm } from "@/components/forms/CourseForm";
 
-const getCreditsInfomartion = (courseBlock: CourseBlockType) => {
-  if ("credits" in courseBlock) {
+const getCreditsInfomartion = (courseBlock: FullCourseBlockType) => {
+  if (courseBlock.credits !== null) {
     return `${courseBlock.credits} crédits`;
   }
 
   const parts = [];
 
-  if ("minCredits" in courseBlock) {
-    parts.push(`Min. ${courseBlock.minCredits} crédits`);
+  if ("minimum_credits" in courseBlock) {
+    parts.push(`Min. ${courseBlock.minimum_credits} crédits`);
   }
 
-  parts.push(`Max. ${courseBlock.maxCredits} crédits`);
+  parts.push(`Max. ${courseBlock.maximum_credits} crédits`);
 
   return `${parts.join(", ")}`;
 };
@@ -21,6 +22,7 @@ const getCreditsInfomartion = (courseBlock: CourseBlockType) => {
 export const Block = () => {
   const courseBlock = useCouseBlockContext().courseBlockType;
   const totalSelectedCredits = useCouseBlockContext().totalSelectedCredits;
+  const program_id = useProgramContext().id;
 
   const canSelect = !("credits" in courseBlock);
 
@@ -44,9 +46,15 @@ export const Block = () => {
       <ul
         className={"flex flex-col py-1.5 gap-1 border-b border-x rounded-b-md"}
       >
-        {courseBlock.classes.map((course) => (
+        {courseBlock.courses.map((course) => (
           <Course key={course.id} course={course} />
         ))}
+        <li>
+          <CourseForm
+            program_id={program_id}
+            course_block_id={courseBlock.id}
+          />
+        </li>
       </ul>
     </div>
   );

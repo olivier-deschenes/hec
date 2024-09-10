@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ProgramType } from "@/types/Program";
+import { ProgramType } from "@/types";
 
 type CoursesListProps = {
   program_id: ProgramType["id"];

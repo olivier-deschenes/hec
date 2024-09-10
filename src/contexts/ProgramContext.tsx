@@ -1,13 +1,13 @@
+import { FullProgramType } from "@/types";
 import { createContext } from "react";
-import type { ProgramTypeOld } from "../data/data";
 
-export const ProgramContext = createContext<ProgramTypeOld | null>(null);
+export const ProgramContext = createContext<FullProgramType | null>(null);
 
 export const ProgramProvider = ({
   program,
   children,
 }: {
-  program: ProgramTypeOld;
+  program: FullProgramType;
   children: React.ReactNode;
 }) => {
   return (
