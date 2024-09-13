@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 
-function Component() {
+export const Navigation = () => {
   return (
     <div className={"flex flex-col gap-5"}>
       <div>
@@ -9,10 +9,11 @@ function Component() {
           <Link to="/programs">Programs</Link>
         </Button>
       </div>
+      <div>
+        <Button asChild>
+          <Link to="/">Home</Link>
+        </Button>
+      </div>
     </div>
   );
-}
-
-export const Route = createFileRoute("/")({
-  component: Component,
-});
+};

@@ -1,11 +1,11 @@
 import { fullProgramQueryOptions } from "@/components/queries/useFullData";
 import { queryClient } from "@/lib/query";
 import { supabase } from "@/lib/supabase";
-import { PostCourseBlockType } from "@/types";
+import { InsertCourseBlockType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-const post = async (postData: PostCourseBlockType) => {
+const post = async (postData: InsertCourseBlockType) => {
   const { data } = await supabase
     .from("course_block")
     .insert(postData)
@@ -20,7 +20,7 @@ const post = async (postData: PostCourseBlockType) => {
 
 const POST_COURSE_BLOCK_KEY = "postCourseBlock";
 
-export const usePostCourseBlock = () => {
+export const useInsertCourseBlock = () => {
   return useMutation({
     mutationFn: post,
     mutationKey: [POST_COURSE_BLOCK_KEY],

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { CourseBlockContext } from "./CourseBlockContext";
 import { CourseBlockGroupContext } from "./CourseBlockGroupContext";
 import { ProgramContext } from "./ProgramContext";
-import { AuthContext } from "@/contexts/AuthContext";
+import { AuthContext } from "@/contexts/auth";
 
 export const useProgramContext = () => {
   const context = useContext(ProgramContext);

@@ -21,6 +21,7 @@ export type Database = {
           prefix: string
           program_id: number
           title: string
+          type: Database["public"]["Enums"]["course_type"]
         }
         Insert: {
           code: string
@@ -33,6 +34,7 @@ export type Database = {
           prefix: string
           program_id: number
           title: string
+          type?: Database["public"]["Enums"]["course_type"]
         }
         Update: {
           code?: string
@@ -45,6 +47,7 @@ export type Database = {
           prefix?: string
           program_id?: number
           title?: string
+          type?: Database["public"]["Enums"]["course_type"]
         }
         Relationships: [
           {
@@ -210,7 +213,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      course_type: "STANDARD" | "OTHER"
     }
     CompositeTypes: {
       [_ in never]: never

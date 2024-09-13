@@ -1,14 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { AuthContextType, AuthContext } from "@/contexts/auth";
 import { router } from "@/lib/router";
 import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
-import { createContext, useEffect, useMemo, useState } from "react";
-
-export type AuthContextType = {
-  user: Session | null;
-};
-
-export const AuthContext = createContext<AuthContextType | null>(null);
+import { useEffect, useMemo, useState } from "react";
 
 const login = async () => {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -55,27 +49,16 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
     await router.invalidate();
   };
 
-  const value: AuthContextType = useMemo(
+  const value = useMemo<AuthContextType>(
     () => ({
       user: session,
+      logout,
+      login,
     }),
     [session]
   );
 
   if (loading) return "🐸🐸🐸🐸";
 
-  return (
-    <AuthContext.Provider value={value}>
-      <div>
-        <h1>
-          {JSON.stringify({
-            email: session?.user.email,
-          })}
-        </h1>
-        <Button onClick={login}>Login</Button>
-        <Button onClick={logout}>Logout</Button>
-      </div>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -50,10 +50,7 @@ export function ProgramForm() {
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-2/3 space-y-6"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="title"

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-import { AuthContextType } from "@/contexts/AuthContext";
 import { QueryClient } from "@tanstack/react-query";
+import { AuthContextType } from "@/contexts/auth";
 
 type RootContextType = {
   authContext: AuthContextType;

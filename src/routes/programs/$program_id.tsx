@@ -20,12 +20,24 @@ function Component() {
 
   return (
     <ProgramProvider program={data}>
-      <div>
-        <h1>Program {data.id}</h1>
+      <div className={"p-5 flex flex-col gap-5"}>
+        <div>
+          <h1 className={"text-3xl font-bold"}>{data.title}</h1>
+          <div>
+            <div>
+              <span className={"font-bold"}>Cours:</span> {data.courseCount}{" "}
+              cours <span>{`(${data.courseCredits} crédits)`}</span>
+            </div>
+            <div>
+              <span className={"font-bold"}>Total Crédits : </span>{" "}
+              {data.totalCredits} crédits
+            </div>
+          </div>
+        </div>
         <div>
           <CourseBlockGroupForm program_id={data.id} />
         </div>
-        <div>
+        <div className={"flex flex-col gap-10"}>
           {data.courseBlockGroups.map((courseBlockGroup) => (
             <CourseBlockGroupProvider
               courseBlockGroupType={courseBlockGroup}

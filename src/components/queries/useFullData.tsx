@@ -13,10 +13,22 @@ const get = async ({ program_id }: Params) => {
     { data: courseBlocks },
     { data: courses },
   ] = await Promise.all([
-    supabase.from("program").select().eq("id", program_id),
-    supabase.from("course_block_group").select().eq("program_id", program_id),
-    supabase.from("course_block").select().eq("program_id", program_id),
-    supabase.from("course").select().eq("program_id", program_id),
+    supabase.from("program").select().eq("id", program_id).order("created_at"),
+    supabase
+      .from("course_block_group")
+      .select()
+      .eq("program_id", program_id)
+      .order("created_at"),
+    supabase
+      .from("course_block")
+      .select()
+      .eq("program_id", program_id)
+      .order("created_at"),
+    supabase
+      .from("course")
+      .select()
+      .eq("program_id", program_id)
+      .order("created_at"),
   ]);
 
   if (!programs) {
@@ -38,14 +50,20 @@ const get = async ({ program_id }: Params) => {
   const fullProgram: FullProgramType = {
     ...programs[0],
     courseCount: courses.length,
-    courseCredits: courseBlocks.reduce(
-      (acc, courseBlock) => acc + (courseBlock.credits ?? 0),
-      0
-    ),
-    totalCredits: courseBlocks.reduce(
-      (acc, courseBlock) => acc + (courseBlock.credits ?? 0),
-      0
-    ),
+    courseCredits: courses.reduce((acc, course) => {
+      if (course.type !== "STANDARD" || course.credits === null) {
+        return acc;
+      }
+
+      return acc + course.credits;
+    }, 0),
+    totalCredits: courses.reduce((acc, course) => {
+      if (course.credits === null) {
+        return acc;
+      }
+
+      return acc + course.credits;
+    }, 0),
     resolveClassUrl: (classData) =>
       `https://www.hec.ca/cours/detail/?cours=${classData.prefix}${classData.code}`,
     courseBlockGroups: courseBlockGroups.map((courseBlockGroup) => ({

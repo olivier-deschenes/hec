@@ -1,83 +1,95 @@
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import type { FullCourseType } from "@/types";
+import { useRef, useState } from "react";
 import {
-  useCourseBlockGroupContext,
-  useCouseBlockContext,
-  useProgramContext,
+	useCourseBlockGroupContext,
+	useCouseBlockContext,
+	useProgramContext,
 } from "../../contexts";
-import { FullCourseType } from "@/types";
-import { useDeleteCourse } from "@/mutations/course/useDeleteCourse";
-import { DeleteButton } from "@/components/forms/DeleteButton";
+
+import type { BaseFormRefType } from "@/components/forms/base/type";
+import { CourseForm } from "@/components/forms/course";
+import { cn } from "@/lib/utils";
 
 type Props = {
-  course: FullCourseType;
+	course: FullCourseType;
 };
 
 export const Course = ({ course }: Props) => {
-  const program = useProgramContext();
-  const optional = useCourseBlockGroupContext().courseBlockGroupType.optional;
-  const toggleCourse = useCouseBlockContext().toggleCourse;
+	const ref = useRef<BaseFormRefType>(null);
 
-  const groupCanSelectMore = useCourseBlockGroupContext().canSelectMore;
-  const blockCanSelectMore = useCouseBlockContext().canSelectMore;
+	const program = useProgramContext();
+	const optional = useCourseBlockGroupContext().courseBlockGroupType.optional;
+	const toggleCourse = useCouseBlockContext().toggleCourse;
 
-  const canSelectMore = groupCanSelectMore && blockCanSelectMore;
+	const groupCanSelectMore = useCourseBlockGroupContext().canSelectMore;
+	const blockCanSelectMore = useCouseBlockContext().canSelectMore;
 
-  const isDone = course.done ?? false;
-  const [checked, setChecked] = useState(isDone);
+	const canSelectMore = groupCanSelectMore && blockCanSelectMore;
 
-  const handleOnClick = () => {
-    try {
-      navigator.clipboard.writeText(`${course.prefix} ${course.code}`);
-    } catch (err) {
-      console.error("Failed to copy text: ", err);
-    }
-  };
+	const isDone = course.done ?? false;
+	const [checked, setChecked] = useState(isDone);
 
-  const { mutate, isPending } = useDeleteCourse();
+	const handleOnClick = () => {
+		try {
+			navigator.clipboard.writeText(`${course.prefix} ${course.code}`);
+		} catch (err) {
+			console.error("Failed to copy text: ", err);
+		}
+	};
 
-  return (
-    <li
-      className={twMerge(
-        "mx-1.5 px-1.5 flex items-center gap-1.5 h-full",
-        (checked || isDone) && "rounded-md",
-        isDone && "bg-green-200",
-        checked && !isDone && "bg-blue-200"
-      )}
-    >
-      <div className={"flex self-start gap-1.5 items-center"}>
-        {optional && (
-          <input
-            type="checkbox"
-            name=""
-            id=""
-            checked={checked}
-            disabled={(!canSelectMore && !checked) || isDone}
-            onChange={() => {
-              setChecked((prev) => !prev);
-              toggleCourse(course);
-            }}
-          />
-        )}
-        <a
-          href={program.resolveClassUrl(course)}
-          className={"text-blue-500 hover:underline font-mono"}
-          target={"_blank"}
-        rel="noreferrer"
-          onClick={(e) => {
-            if (e.ctrlKey || e.metaKey) {
-              e.preventDefault();
-              handleOnClick();
-            }
-          }}
-        >
-          <span className={"text-nowrap"}>
-            {course.prefix} {course.code}
-          </span>
-        </a>
-      </div>
-      <span className={"text-ellipsis overflow-hidden"}>{course.title}</span>
-      <DeleteButton onClick={() => mutate(course.id)} isPending={isPending} />
-    </li>
-  );
+	return (
+		<li className={"flex flex-col"}>
+			<CourseForm
+				program_id={program.id}
+				defaultData={course}
+				course_block_id={course.course_block_id}
+				dialogRef={ref}
+			/>
+			<button
+				className={cn(
+					"mx-1.5 px-1.5 h-full flex items-centers gap-1.5 hover:bg-slate-100",
+					(checked || isDone) && "rounded-md",
+					isDone && "bg-green-200 hover:bg-green-300",
+					checked && !isDone && "bg-blue-200",
+				)}
+				onClick={() => ref.current?.open()}
+				type="button"
+			>
+				<div className={"flex self-start gap-1.5 items-center"}>
+					{optional && (
+						<input
+							type="checkbox"
+							name=""
+							id=""
+							checked={checked}
+							disabled={(!canSelectMore && !checked) || isDone}
+							onChange={() => {
+								setChecked((prev) => !prev);
+								toggleCourse(course);
+							}}
+						/>
+					)}
+					<a
+						href={program.resolveClassUrl(course)}
+						className={"text-blue-500 hover:underline font-mono"}
+						target={"_blank"}
+						rel="noreferrer"
+						onClick={(e) => {
+							if (e.ctrlKey || e.metaKey) {
+								e.preventDefault();
+								handleOnClick();
+							}
+						}}
+					>
+						<span className={"text-nowrap"}>
+							{course.prefix} {course.code}
+						</span>
+					</a>
+				</div>
+				<span className={"text-ellipsis overflow-hidden text-left"}>
+					{course.title}
+				</span>
+			</button>
+		</li>
+	);
 };

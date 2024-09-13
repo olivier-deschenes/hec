@@ -1,14 +1,15 @@
 import { fullProgramQueryOptions } from "@/components/queries/useFullData";
 import { queryClient } from "@/lib/query";
 import { supabase } from "@/lib/supabase";
-import { PostCourseBlockGroupType } from "@/types";
+import { UpdateCourseBlockGroupType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-const post = async (postData: PostCourseBlockGroupType) => {
+const fn = async (entity: UpdateCourseBlockGroupType) => {
   const { data } = await supabase
     .from("course_block_group")
-    .insert(postData)
+    .update(entity)
+    .eq("id", entity.id!)
     .select();
 
   if (!data) {
@@ -18,12 +19,10 @@ const post = async (postData: PostCourseBlockGroupType) => {
   return data[0];
 };
 
-const POST_COURSE_GROUP_BLOCK__KEY = "postCourseBlockGroup";
-
-export const usePostCourseBlockGroup = () => {
+export const useUpdateCourseBlockGroup = () => {
   return useMutation({
-    mutationFn: post,
-    mutationKey: [POST_COURSE_GROUP_BLOCK__KEY],
+    mutationFn: fn,
+    mutationKey: ["insertCourseBlockGroup"],
     onSuccess: (data) => {
       toast.success("Successfully");
 

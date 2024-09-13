@@ -14,70 +14,94 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ProgramType } from "@/types";
-import { usePostCourseBlockGroup } from "@/mutations/course-block-group/usePostCourseBlockGroup";
+import { ProgramType, UpdateCourseBlockGroupType } from "@/types";
+import { useInsertCourseBlockGroup } from "@/mutations/course-block-group/useInsertCourseBlockGroup";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+import { FormRow } from "@/components/forms/parts/FormRow";
+import { useUpdateCourseBlockGroup } from "@/mutations/course-block-group/useUpdateCourseBlockGroup";
+import { BaseForm } from "@/components/forms/base";
 
 const FormSchema = z.object({
   title: z.string(),
   program_id: z.number(),
   optional: z.boolean().default(false),
   credits: z.number().nullable().default(null),
+  id: z.number().optional(),
 });
 
 type Props = {
   program_id: ProgramType["id"];
+  defaultData?: UpdateCourseBlockGroupType;
 };
 
-export function CourseBlockGroupForm({ program_id }: Props) {
-  const [open, setOpen] = useState(false);
-
+export function CourseBlockGroupForm({ program_id, defaultData }: Props) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
+    defaultValues: defaultData ?? {
       title: "",
       program_id,
       credits: null,
     },
   });
 
-  const { mutate } = usePostCourseBlockGroup();
+  const { mutateAsync: insert } = useInsertCourseBlockGroup();
+  const { mutateAsync: update } = useUpdateCourseBlockGroup();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    mutate(data);
-
-    setOpen(false);
+  async function onSubmit(
+    data: z.infer<typeof FormSchema>,
+    setOpen: (open: boolean) => void
+  ) {
+    try {
+      if (defaultData) {
+        await update(data);
+      } else {
+        await insert(data);
+      }
+      form.reset();
+      setOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>Create Course Block Group</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-2/3 space-y-6"
-            >
+    <BaseForm
+      openButtonTitle={defaultData ? "Update" : "Create"}
+      title={
+        defaultData ? "Update Course Block Group" : "Create Course Block Group"
+      }
+    >
+      {(setOpen) => (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit((data) => onSubmit(data, setOpen))}>
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Code</FormLabel>
+                  <FormControl>
+                    <Input placeholder="code" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormRow>
               <FormField
                 control={form.control}
-                name="title"
-                render={({ field }) => (
+                name="credits"
+                render={() => (
                   <FormItem>
-                    <FormLabel>Code</FormLabel>
+                    <FormLabel>Credits</FormLabel>
                     <FormControl>
-                      <Input placeholder="code" {...field} />
+                      <Input
+                        placeholder="credits"
+                        type="number"
+                        {...form.register("credits", {
+                          valueAsNumber: true,
+                        })}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -99,11 +123,11 @@ export function CourseBlockGroupForm({ program_id }: Props) {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
-            </form>
-          </Form>
-        </DialogHeader>
-      </DialogContent>
-    </Dialog>
+            </FormRow>
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
+      )}
+    </BaseForm>
   );
 }

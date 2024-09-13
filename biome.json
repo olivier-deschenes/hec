@@ -1,12 +1,22 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.6.3/schema.json",
-	"organizeImports": {
-		"enabled": true
+	"files": {
+		"include": ["./src/**/*.{js,ts,jsx,tsx}"]
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"correctness": {
+				"noUnusedImports": "error",
+				"noUnusedVariables": "error"
+			},
+			"recommended": true,
+			"style": {
+				"noNonNullAssertion": "warn"
+			}
 		}
+	},
+	"organizeImports": {
+		"enabled": true
 	}
 }

@@ -1,68 +1,92 @@
-import { FullCourseBlockType } from "@/types";
+import type { BaseFormRefType } from "@/components/forms/base/type";
+import { CourseForm } from "@/components/forms/course";
+import { CourseBlockForm } from "@/components/forms/course-block";
+import type { FullCourseBlockType } from "@/types";
+import { useRef } from "react";
 import { useCouseBlockContext, useProgramContext } from "../../contexts";
 import { Course } from "./Course";
-import { CourseForm } from "@/components/forms/CourseForm";
-import { useDeleteCourseBlock } from "@/mutations/course-block/useDeleteCourseBlock";
-import { DeleteButton } from "@/components/forms/DeleteButton";
 
 const getCreditsInfomartion = (courseBlock: FullCourseBlockType) => {
-  if (courseBlock.credits !== null) {
-    return `${courseBlock.credits} crédits`;
-  }
+	if (courseBlock.credits !== null) {
+		return `${courseBlock.credits} crédits`;
+	}
 
-  const parts = [];
+	const parts = [];
 
-  if ("minimum_credits" in courseBlock) {
-    parts.push(`Min. ${courseBlock.minimum_credits} crédits`);
-  }
+	if (
+		"minimum_credits" in courseBlock &&
+		courseBlock.minimum_credits !== null
+	) {
+		parts.push(`Min. ${courseBlock.minimum_credits} crédits`);
+	}
 
-  parts.push(`Max. ${courseBlock.maximum_credits} crédits`);
+	if (
+		"maximum_credits" in courseBlock &&
+		courseBlock.maximum_credits !== null
+	) {
+		parts.push(`Max. ${courseBlock.maximum_credits} crédits`);
+	}
 
-  return `${parts.join(", ")}`;
+	return `${parts.join(", ")}`;
 };
 
 export const Block = () => {
-  const courseBlock = useCouseBlockContext().courseBlockType;
-  const totalSelectedCredits = useCouseBlockContext().totalSelectedCredits;
-  const program_id = useProgramContext().id;
+	const courseBlock = useCouseBlockContext().courseBlockType;
+	const totalSelectedCredits = useCouseBlockContext().totalSelectedCredits;
+	const program_id = useProgramContext().id;
+	const courseBlockFormRef = useRef<BaseFormRefType>(null);
+	const courseFormRef = useRef<BaseFormRefType>(null);
 
-  const canSelect = !("credits" in courseBlock);
-  
-  const { mutate, isPending } = useDeleteCourseBlock();
+	const canSelect = !("credits" in courseBlock);
 
-  return (
-    <div className={"flex flex-col"}>
-      <div
-        className={"bg-[#0169BF] flex justify-between p-2.5 gap-1 rounded-t-md"}
-      >
-        <h3 className={"font-bold text-white"}>{courseBlock.title}</h3>
-        <div className={"flex gap-2.5"}>
-          {canSelect && (
-            <div className={"bg-blue-200 rounded-md px-2.5"}>
-              {`${totalSelectedCredits} crédits sél.`}
-            </div>
-          )}
-          <div className={"bg-slate-300 rounded-md px-2.5"}>
-            {getCreditsInfomartion(courseBlock)}
-          </div>
-        </div>
-      </div>
-      <ul
-        className={"flex flex-col py-1.5 gap-1 border-b border-x rounded-b-md"}
-      >
-        {courseBlock.courses.map((course) => (
-          <Course key={course.id} course={course} />
-        ))}
-        <li>
-          <CourseForm
-            program_id={program_id}
-            course_block_id={courseBlock.id}
-          />
-        </li>
-      </ul>
-      <DeleteButton onClick={() => mutate(courseBlock.id)} isPending={isPending}>
-        Delete Block
-      </DeleteButton>
-    </div>
-  );
+	return (
+		<div className={"flex flex-col"}>
+			<CourseBlockForm
+				course_block_group_id={courseBlock.course_block_group_id}
+				program_id={program_id}
+				defaultData={courseBlock}
+				dialogRef={courseBlockFormRef}
+			/>
+			<button
+				className={"bg-[#0169BF] flex justify-between p-2.5 gap-1 rounded-t-md"}
+				onClick={() => {
+					courseBlockFormRef.current?.open();
+				}}
+				type="button"
+			>
+				<h3 className={"font-bold text-white"}>{courseBlock.title}</h3>
+				<div className={"flex gap-2.5"}>
+					{canSelect && (
+						<div className={"bg-blue-200 rounded-md px-2.5"}>
+							{`${totalSelectedCredits} crédits sél.`}
+						</div>
+					)}
+					<div className={"bg-slate-300 rounded-md px-2.5"}>
+						{getCreditsInfomartion(courseBlock)}
+					</div>
+				</div>
+			</button>
+			<ul
+				className={"flex flex-col py-1.5 gap-1 border-b border-x rounded-b-md"}
+			>
+				{courseBlock.courses.map((course) => (
+					<Course key={course.id} course={course} />
+				))}
+				<li className={"flex flex-col items-start"}>
+					<button
+						onClick={() => courseFormRef.current?.open()}
+						className={"mx-1.5 px-1.5 text-muted-foreground"}
+						type="button"
+					>
+						Add Course ...
+					</button>
+				</li>
+			</ul>
+			<CourseForm
+				program_id={program_id}
+				course_block_id={courseBlock.id}
+				dialogRef={courseFormRef}
+			/>
+		</div>
+	);
 };
