@@ -14,8 +14,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 }; */
 
 const signInWithLinkedIn = async () => {
+	console.log(import.meta.env.VITE_SUPABASE_REDIRECT_URL);
 	const { data, error } = await supabase.auth.signInWithOAuth({
 		provider: "linkedin_oidc",
+		options: {
+			redirectTo: import.meta.env.VITE_SUPABASE_REDIRECT_URL!,
+		},
 	});
 
 	console.log(data, error);

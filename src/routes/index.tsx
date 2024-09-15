@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 function Component() {
 	return (
-		<div className={"flex flex-col gap-5"}>
+		<div className={"flex flex-col gap-5 p-5"}>
 			<Navigation />
 			<header className={"flex flex-col gap-1.5"}>
 				<h1 className={"text-9xl"}>Semestri</h1>

@@ -15,6 +15,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "@tanstack/react-router";
 import { ExternalLinkIcon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,6 +29,7 @@ export const Course = ({ course }: Props) => {
 	const program = useProgramContext();
 	const optional = useCourseBlockGroupContext().courseBlockGroupType.optional;
 	const toggleCourse = useCouseBlockContext().toggleCourse;
+	const navigate = useNavigate();
 
 	const groupCanSelectMore = useCourseBlockGroupContext().canSelectMore;
 	const blockCanSelectMore = useCouseBlockContext().canSelectMore;
@@ -52,6 +54,17 @@ export const Course = ({ course }: Props) => {
 		} catch (err) {
 			console.error("Failed to copy text: ", err);
 		}
+	};
+
+	const onCourseNameClick = () => {
+		navigate({
+			to: `/programs/${program.id}`,
+			search: {
+				form: "course",
+				course_id: course.id,
+				course_block_id: course.course_block_id,
+			},
+		});
 	};
 
 	return (
@@ -110,7 +123,7 @@ export const Course = ({ course }: Props) => {
 					"text-ellipsis overflow-hidden text-left hover:bg-slate-50 rounded-md px-1.5"
 				}
 				type={"button"}
-				onClick={() => ref.current?.open()}
+				onClick={onCourseNameClick}
 			>
 				{course.title}
 			</button>

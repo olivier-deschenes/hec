@@ -8,7 +8,7 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ["Montserrat", 'sans-serif'],
+  			sans: ["Roboto", "Montserrat", 'sans-serif'],
   			mono: ["Reddit Mono", 'monospace']
   		},
   		borderRadius: {

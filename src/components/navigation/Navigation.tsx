@@ -16,9 +16,7 @@ export const Navigation = () => {
 	const { session, logout } = useAuthContext();
 
 	return (
-		<div
-			className={"flex gap-5 w-full px-5 py-2.5 justify-between items-center"}
-		>
+		<div className={"flex gap-5 w-full justify-between items-center"}>
 			<div>
 				<Button asChild variant={"outline"}>
 					<Link to="/programs">Programs</Link>
