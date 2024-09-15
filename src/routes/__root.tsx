@@ -1,17 +1,17 @@
-import * as React from "react";
+import type { AuthContextType } from "@/contexts/auth";
+import type { QueryClient } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-import { QueryClient } from "@tanstack/react-query";
-import { AuthContextType } from "@/contexts/auth";
+import * as React from "react";
 
 type RootContextType = {
-  authContext: AuthContextType;
-  queryClient: QueryClient;
+	authContext: AuthContextType;
+	queryClient: QueryClient;
 };
 
 export const Route = createRootRouteWithContext<RootContextType>()({
-  component: () => (
-    <React.Fragment>
-      <Outlet />
-    </React.Fragment>
-  ),
+	component: () => (
+		<React.Fragment>
+			<Outlet />
+		</React.Fragment>
+	),
 });

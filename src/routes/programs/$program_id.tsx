@@ -1,4 +1,3 @@
-import { CourseBlockGroupForm } from "@/components/forms/course-block-group";
 import { useFullProgram } from "@/components/queries/useFullData";
 import { Group } from "@/components/test/Group";
 import { CourseBlockGroupProvider } from "@/contexts/CourseBlockGroupContext";
@@ -34,9 +33,7 @@ function Component() {
 						</div>
 					</div>
 				</div>
-				<div>
-					<CourseBlockGroupForm program_id={data.id} />
-				</div>
+				<div>{/* <CourseBlockGroupForm program_id={data.id} /> */}</div>
 				<div className={"flex flex-col gap-10"}>
 					{data.courseBlockGroups.map((courseBlockGroup) => (
 						<CourseBlockGroupProvider

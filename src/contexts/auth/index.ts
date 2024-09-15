@@ -1,10 +1,10 @@
-import { Session } from "@supabase/supabase-js";
+import type { Session as SessionType } from "@supabase/supabase-js";
 import { createContext } from "react";
 
 export type AuthContextType = {
-  user: Session | null;
+  session: SessionType | null;
   logout: () => void;
-  login: () => void;
+  signInWithLinkedIn: () => void;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);

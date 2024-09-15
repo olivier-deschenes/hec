@@ -11,11 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthImport } from './routes/auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProgramsIndexImport } from './routes/programs/index'
 import { Route as ProgramsProgramidImport } from './routes/programs/$program_id'
+import { Route as AuthLoginImport } from './routes/auth/login'
 
 // Create/Update Routes
+
+const AuthRoute = AuthImport.update({
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
@@ -32,6 +39,11 @@ const ProgramsProgramidRoute = ProgramsProgramidImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthLoginRoute = AuthLoginImport.update({
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -42,6 +54,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof AuthImport
     }
     '/programs/$program_id': {
       id: '/programs/$program_id'
@@ -62,14 +88,28 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
   '/programs/$program_id': typeof ProgramsProgramidRoute
   '/programs': typeof ProgramsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
   '/programs/$program_id': typeof ProgramsProgramidRoute
   '/programs': typeof ProgramsIndexRoute
 }
@@ -77,27 +117,42 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
   '/programs/$program_id': typeof ProgramsProgramidRoute
   '/programs/': typeof ProgramsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/programs/$program_id' | '/programs'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/auth/login'
+    | '/programs/$program_id'
+    | '/programs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/programs/$program_id' | '/programs'
-  id: '__root__' | '/' | '/programs/$program_id' | '/programs/'
+  to: '/' | '/auth' | '/auth/login' | '/programs/$program_id' | '/programs'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/auth/login'
+    | '/programs/$program_id'
+    | '/programs/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
   ProgramsProgramidRoute: typeof ProgramsProgramidRoute
   ProgramsIndexRoute: typeof ProgramsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRouteWithChildren,
   ProgramsProgramidRoute: ProgramsProgramidRoute,
   ProgramsIndexRoute: ProgramsIndexRoute,
 }
@@ -115,12 +170,23 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auth",
         "/programs/$program_id",
         "/programs/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/auth": {
+      "filePath": "auth.tsx",
+      "children": [
+        "/auth/login"
+      ]
+    },
+    "/auth/login": {
+      "filePath": "auth/login.tsx",
+      "parent": "/auth"
     },
     "/programs/$program_id": {
       "filePath": "programs/$program_id.tsx"

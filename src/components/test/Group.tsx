@@ -49,7 +49,7 @@ export const Group = () => {
 			</h2>
 			<div
 				className={
-					"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start"
+					"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
 				}
 			>
 				{courseBlockGroup.courseBlocks.map((courseBlock) => (
@@ -65,6 +65,7 @@ export const Group = () => {
 						courseBlockFormRef.current?.open();
 					}}
 					variant={"outline"}
+					className={"h-36"}
 				>
 					Create Course Block
 				</Button>

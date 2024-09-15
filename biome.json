@@ -1,8 +1,5 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.6.3/schema.json",
-	"files": {
-		"include": ["./src/**/*.{js,ts,jsx,tsx}"]
-	},
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -12,7 +9,7 @@
 			},
 			"recommended": true,
 			"style": {
-				"noNonNullAssertion": "warn"
+				"noNonNullAssertion": "off"
 			}
 		}
 	},

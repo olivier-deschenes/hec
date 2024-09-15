@@ -1,64 +1,72 @@
-import { AuthContextType, AuthContext } from "@/contexts/auth";
+import { AuthContext, type AuthContextType } from "@/contexts/auth";
 import { router } from "@/lib/router";
 import { supabase } from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
-import { useEffect, useMemo, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-const login = async () => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: "olivierdeschenes9@gmail.com",
-    password: "1234567@",
-  });
+/* const login = async () => {
+	const { data, error } = await supabase.auth.signInWithPassword({
+		email: "olivierdeschenes9@gmail.com",
+		password: "1234567@",
+	});
 
-  console.log(data, error);
+	console.log(data, error);
+}; */
+
+const signInWithLinkedIn = async () => {
+	const { data, error } = await supabase.auth.signInWithOAuth({
+		provider: "linkedin_oidc",
+	});
+
+	console.log(data, error);
 };
 
 export const AuthProvider = ({ children }: React.PropsWithChildren) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+	const [session, setSession] = useState<Session | null>(null);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const handleAuth = async () => {
-      const { data, error } = await supabase.auth.getSession();
+	useEffect(() => {
+		const handleAuth = async () => {
+			const { data, error } = await supabase.auth.getSession();
 
-      if (error) {
-        console.error(error);
-      } else {
-        setSession(data.session);
-      }
+			if (error) {
+				console.error(error);
+			} else {
+				setSession(data.session);
+			}
 
-      setLoading(false);
-    };
+			setLoading(false);
+		};
 
-    handleAuth();
+		handleAuth();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
+		const {
+			data: { subscription },
+		} = supabase.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+		});
 
-    return () => subscription.unsubscribe();
-  }, []);
+		return () => subscription.unsubscribe();
+	}, []);
 
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut();
+	const logout = useCallback(async () => {
+		const { error } = await supabase.auth.signOut();
 
-    console.log(error);
+		console.log(error);
 
-    await router.invalidate();
-  };
+		await router.invalidate();
+	}, []);
 
-  const value = useMemo<AuthContextType>(
-    () => ({
-      user: session,
-      logout,
-      login,
-    }),
-    [session]
-  );
+	const value = useMemo<AuthContextType>(
+		() => ({
+			session,
+			logout,
+			signInWithLinkedIn,
+		}),
+		[session, logout],
+	);
 
-  if (loading) return "🐸🐸🐸🐸";
+	if (loading) return "🐸🐸🐸🐸";
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
