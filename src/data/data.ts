@@ -34,6 +34,12 @@ export const getDoneCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
   }, 0);
 };
 
+export const getDoneCreditsOfCourseGroup = (courseGroup: CourseBlockGroupType) => {
+  return courseGroup.courseBlocks.reduce((acc, courseBlock) => {
+    return acc + getDoneCreditsOfCourseBlock(courseBlock);
+  }, 0);
+}
+
 export type CourseBlockType = {
   title: string;
   classes: CourseType[];
@@ -169,6 +175,20 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Regards croisés sur l'entreprise",
               id: v4(),
               done: true,
+            },
+          ],
+        },
+        {
+          title: "Cours au choix",
+          credits: 3,
+          id: v4(),
+          classes: [
+            {
+              code: "",
+              credits: 3,
+              prefix: "",
+              title: "Un des cours offerts à la M. Sc",
+              id: v4(),
             },
           ],
         },

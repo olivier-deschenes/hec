@@ -3,6 +3,7 @@ import {
   type CourseBlockGroupType,
   type CourseType,
   getCourseKey,
+  getDoneCreditsOfCourseGroup,
 } from "../data/data";
 
 type CourseBlockGroupStateType = {
@@ -28,7 +29,7 @@ export const CourseBlockGroupProvider = ({
   const [selectedCourseKeys, setSelectedCourseKeys] =
     useState<CourseBlockGroupStateType>({
       selectedCourseKeys: [],
-      totalSelectedCredits: 0,
+      totalSelectedCredits: getDoneCreditsOfCourseGroup(courseBlockGroupType),
       canSelectMore: true,
     });
 
