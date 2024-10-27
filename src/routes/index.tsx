@@ -8,7 +8,6 @@ import {
   UserButton,
   useUser,
 } from "@clerk/clerk-react";
-import { Button } from "@/components/ui/button";
 
 function Component() {
   const { user } = useUser();
