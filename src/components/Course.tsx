@@ -21,8 +21,10 @@ export const Course = ({ course }: Props) => {
 
   const canSelectMore = groupCanSelectMore && blockCanSelectMore;
 
-  const isDone = course.done ?? false;
-  const [checked, setChecked] = useState(isDone);
+  const isStarted = course.started ?? false;
+  const isDone = course.done ?? false ;
+
+  const [checked, setChecked] = useState(isDone || isStarted);
 
   const handleOnClick = () => {
     try {
@@ -36,9 +38,10 @@ export const Course = ({ course }: Props) => {
     <li
       className={twMerge(
         "mx-1.5 px-1.5 flex items-center gap-1.5 h-full",
-        (checked || isDone) && "rounded-md",
+        (checked || isDone || isStarted) && "rounded-md",
         isDone && "bg-green-200",
-        checked && !isDone && "bg-blue-200",
+        isStarted && "bg-blue-200",
+        checked && !isDone && !isStarted && "bg-blue-200",
       )}
     >
       <div className={"flex self-start gap-1.5 items-center"}>
@@ -48,7 +51,7 @@ export const Course = ({ course }: Props) => {
             name=""
             id=""
             checked={checked}
-            disabled={(!canSelectMore && !checked) || isDone}
+            disabled={(!canSelectMore && !checked) || isDone || isStarted}
             onChange={() => {
               setChecked((prev) => !prev);
               toggleCourse(course);

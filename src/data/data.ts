@@ -13,6 +13,7 @@ export type CourseType = {
   title: string;
   id: string;
   done?: boolean;
+  started?: boolean;
 };
 
 export const getMaxCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
@@ -25,7 +26,7 @@ export const getMaxCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
 
 export const getDoneCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
   return courseBlock.classes.reduce((acc, course) => {
-    if (course.done) {
+    if (course.done || course.started) {
       return acc + course.credits;
     }
 
@@ -120,6 +121,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               credits: 3,
               title: "Planification et contrôle de systèmes logistiques",
               id: v4(),
+              started: true,
             },
             {
               code: "60521",
@@ -143,6 +145,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               prefix: "METH",
               title: "Recherche et intervention en gestion",
               id: v4(),
+              started: true,
             },
             {
               code: "60550",
@@ -228,6 +231,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               prefix: "OPER",
               title: "Gestion des systèmes d'entreposage",
               id: v4(),
+              started: true,
             },
             {
               code: "60502",
@@ -257,6 +261,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               prefix: "OPER",
               title: "Stratégie d'approvisionnement",
               id: v4(),
+              started: true,
             },
           ],
         },
