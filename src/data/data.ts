@@ -6,6 +6,8 @@ export const getCourseKey = (course: CourseType) =>
 export const compateCourseToKey = (course: CourseType, key: string) =>
   getCourseKey(course) === key;
 
+export type TrimesterType = "A2024" | "H2025";
+
 export type CourseType = {
   code: string;
   prefix: string;
@@ -14,6 +16,7 @@ export type CourseType = {
   id: string;
   done?: boolean;
   started?: boolean;
+  trimester?: TrimesterType;
 };
 
 export const getMaxCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
@@ -34,11 +37,13 @@ export const getDoneCreditsOfCourseBlock = (courseBlock: CourseBlockType) => {
   }, 0);
 };
 
-export const getDoneCreditsOfCourseGroup = (courseGroup: CourseBlockGroupType) => {
+export const getDoneCreditsOfCourseGroup = (
+  courseGroup: CourseBlockGroupType
+) => {
   return courseGroup.courseBlocks.reduce((acc, courseBlock) => {
     return acc + getDoneCreditsOfCourseBlock(courseBlock);
   }, 0);
-}
+};
 
 export type CourseBlockType = {
   title: string;
@@ -72,7 +77,7 @@ export type ProgramType = {
 
 export const OperationsManagementAndLogistics: ProgramType = {
   title:
-    "Maîtrise en gestion (M. Sc.) - gestion des opérations et de la logistique",
+    "Maîtrise en gestion (M. Sc.) - Gestion des opérations et de la logistique",
   resolveClassUrl: (classData) =>
     `https://www.hec.ca/cours/detail/?cours=${classData.prefix}${classData.code}`,
   id: v4(),
@@ -98,6 +103,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Logistique",
               id: v4(),
               done: true,
+              trimester: "A2024",
             },
           ],
         },
@@ -128,6 +134,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Planification et contrôle de systèmes logistiques",
               id: v4(),
               started: true,
+              trimester: "H2025",
             },
             {
               code: "60521",
@@ -136,6 +143,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Stratégie des opérations et amélioration des processus",
               id: v4(),
               done: true,
+              trimester: "A2024",
             },
           ],
         },
@@ -152,6 +160,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Recherche et intervention en gestion",
               id: v4(),
               started: true,
+              trimester: "H2025",
             },
             {
               code: "60550",
@@ -160,6 +169,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Outils d'aide à la décision en gestion des opérations",
               id: v4(),
               started: true,
+              trimester: "H2025",
             },
           ],
         },
@@ -176,6 +186,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Regards croisés sur l'entreprise",
               id: v4(),
               done: true,
+              trimester: "A2024",
             },
           ],
         },
@@ -222,6 +233,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "La consultation en gestion",
               id: v4(),
               done: true,
+              trimester: "A2024",
             },
             {
               code: "60500",
@@ -253,6 +265,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Gestion des systèmes d'entreposage",
               id: v4(),
               started: true,
+              trimester: "H2025",
             },
             {
               code: "60502",
@@ -261,6 +274,7 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title: "Systèmes de transport",
               id: v4(),
               done: true,
+              trimester: "A2024",
             },
             {
               code: "60503",

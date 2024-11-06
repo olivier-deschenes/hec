@@ -22,7 +22,7 @@ export const Course = ({ course }: Props) => {
   const canSelectMore = groupCanSelectMore && blockCanSelectMore;
 
   const isStarted = course.started ?? false;
-  const isDone = course.done ?? false ;
+  const isDone = course.done ?? false;
 
   const [checked, setChecked] = useState(isDone || isStarted);
 
@@ -41,7 +41,7 @@ export const Course = ({ course }: Props) => {
         (checked || isDone || isStarted) && "rounded-md",
         isDone && "bg-green-200",
         isStarted && "bg-blue-200",
-        checked && !isDone && !isStarted && "bg-blue-200",
+        checked && !isDone && !isStarted && "bg-blue-200"
       )}
     >
       <div className={"flex self-start gap-1.5 items-center"}>
@@ -74,7 +74,21 @@ export const Course = ({ course }: Props) => {
             {course.prefix} {course.code}
           </span>
         </a>
+        {course.trimester ? (
+          <div className={"flex items-center"}>
+            <span
+              className={twMerge(
+                "rounded-md leading-snug text-xs px-1 text-white",
+                course.done && "bg-green-600",
+                course.started && "bg-blue-600"
+              )}
+            >
+              {course.trimester}
+            </span>
+          </div>
+        ) : null}
       </div>
+
       <span className={"text-ellipsis overflow-hidden"}>{course.title}</span>
     </li>
   );
