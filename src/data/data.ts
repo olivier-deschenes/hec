@@ -126,6 +126,8 @@ export const OperationsManagementAndLogistics: ProgramType = {
               credits: 3,
               title: "	Chaîne logistique : fondements et tendances",
               id: v4(),
+              started: true,
+              trimester: "H2025",
             },
             {
               code: "60520",
@@ -264,8 +266,6 @@ export const OperationsManagementAndLogistics: ProgramType = {
               prefix: "OPER",
               title: "Gestion des systèmes d'entreposage",
               id: v4(),
-              started: true,
-              trimester: "H2025",
             },
             {
               code: "60502",
@@ -356,6 +356,8 @@ export const OperationsManagementAndLogistics: ProgramType = {
               title:
                 "La conduite responsable de la recherche : des normes à la pratique",
               id: v4(),
+              started: true,
+              trimester: "H2025",
             },
             {
               code: "66202",
